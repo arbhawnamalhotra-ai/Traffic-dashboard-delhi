@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Delhi Traffic Command Centre | Classroom Dashboard</title>
+<style>
+:root{--bg:#101923;--panel:#192634;--line:#304253;--txt:#edf4f8;--muted:#a9bac8;--accent:#6ec5d5;--warn:#f0bd65}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 system-ui,Arial,sans-serif}
+header{padding:24px max(18px,calc((100vw - 1180px)/2));background:#142330;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:700}.head{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}h1{font-size:clamp(24px,4vw,34px);margin:5px 0}.sub,.muted{color:var(--muted);font-size:13px}
+main{max-width:1180px;margin:auto;padding:18px}
+.grid{display:grid;gap:14px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.twocol{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px;min-width:0}
+.metric{font-size:27px;font-weight:750;line-height:1.2;margin:7px 0}.label{font-size:12px;color:var(--muted)}
+h2{font-size:18px;margin:0 0 10px}h3{font-size:15px;margin:0}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:4px 9px;color:var(--muted);font-size:11px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tab,button,select{font:inherit;color:var(--txt);background:#213343;border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}.tab.active{background:#245366;border-color:var(--accent)}
+.mapgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.map{width:100%;height:260px;border:0;border-radius:8px;background:#dce5eb}.maphead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px}
+a{color:#8ed7e4}.feed{border-left:3px solid var(--warn);padding:8px 10px;margin:10px 0;background:#202f3c;border-radius:0 7px 7px 0}
+input,select{max-width:100%}.formrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.formrow select{flex:1;min-width:150px}.incident{padding:9px;border-bottom:1px solid var(--line);font-size:13px}
+footer{max-width:1180px;margin:auto;padding:0 18px 26px;color:var(--muted);font-size:12px}
+@media(max-width:760px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.twocol,.mapgrid{grid-template-columns:1fr}.map{height:230px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div><div class="eyebrow">URBAN MOBILITY • DELHI NCT</div><h1>Delhi Traffic Command Centre</h1><div class="sub">Interactive classroom dashboard · traffic, incidents and road safety</div></div><div style="text-align:right"><span class="pill">LIVE LINKS · NO CENTRAL LIVE FEED</span><div id="clock" style="font-weight:700;margin-top:8px"></div><div class="muted">India Standard Time</div></div></div></header>
+<main>
+<section class="grid metrics">
+<div class="card"><div class="label">Traffic map zones</div><div class="metric">4</div><div class="muted">External map views</div></div>
+<div class="card"><div class="label">Official traffic alerts</div><div class="metric">↗</div><div class="muted">Open police alert portal</div></div>
+<div class="card"><div class="label">Verified live accident count</div><div class="metric">—</div><div class="muted">No public feed connected</div></div>
+<div class="card"><div class="label">Accident-prone locations</div><div class="metric">MAP</div><div class="muted">Reference information</div></div>
+</section>
+<section class="card" style="margin-top:14px">
+<h2>Monitoring zones</h2><div class="muted">Choose a zone to update the four map panels.</div>
+<div class="tabs" id="tabs"><button class="tab active" data-zone="city">Citywide</button><button class="tab" data-zone="central">Central Delhi</button><button class="tab" data-zone="south">South / Airport</button><button class="tab" data-zone="east">East / Northeast</button></div>
+<div id="zoneDescription" class="muted"></div>
+</section>
+<section style="margin-top:14px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap"><h2 style="margin:0">Traffic map views</h2><span class="pill">Traffic overlay available via external map provider</span></div>
+<div class="grid mapgrid" id="maps">
+<div class="card"><div class="maphead"><h3>North / Central</h3><a id="link0" target="_blank" rel="noopener">Open traffic ↗</a></div><iframe class="map" id="map0" title="North Central Delhi map" loading="lazy"></iframe><div class="muted">Map preview; open traffic link for provider's live traffic layer.</div></div>
+<div class="card"><div class="maphead"><h3>South / Airport</h3><a id="link1" target="_blank" rel="noopener">Open traffic ↗</a></div><iframe class="map" id="map1" title="South Delhi map" loading="lazy"></iframe><div class="muted">Map preview; open traffic link for provider's live traffic layer.</div></div>
+<div class="card"><div class="maphead"><h3>East / Northeast</h3><a id="link2" target="_blank" rel="noopener">Open traffic ↗</a></div><iframe class="map" id="map2" title="East Delhi map" loading="lazy"></iframe><div class="muted">Map preview; open traffic link for provider's live traffic layer.</div></div>
+<div class="card"><div class="maphead"><h3>West / Outer Delhi</h3><a id="link3" target="_blank" rel="noopener">Open traffic ↗</a></div><iframe class="map" id="map3" title="West Delhi map" loading="lazy"></iframe><div class="muted">Map preview; open traffic link for provider's live traffic layer.</div></div>
+</div></section>
+<section class="grid twocol" style="margin-top:14px">
+<div class="card"><h2>Official traffic information</h2><p class="muted">Use the official portals to check current alerts, diversions and advisories. An alert may change or be cleared; verify its timestamp and status.</p>
+<div class="feed"><b>Traffic alerts & advisories</b><br><a href="https://traffic.delhipolice.gov.in/en/news-alertadvisory/alerts" target="_blank" rel="noopener">Delhi Traffic Police alerts ↗</a></div>
+<div class="feed"><b>Traffic diversions</b><br><a href="https://traffic.delhipolice.gov.in/en/traffic-diversions" target="_blank" rel="noopener">Diversion information ↗</a></div>
+<div class="feed"><b>Traffic advisory portal</b><br><a href="https://trafficupdates.delhipolice.gov.in/" target="_blank" rel="noopener">Delhi Traffic Advisory ↗</a></div>
+</div>
+<div class="card"><h2>Accident & road-safety references</h2><p class="muted">Accident-prone area maps are reference layers, not a live incident stream. This dashboard does not display a verified real-time accident total.</p>
+<div class="feed"><b>Official traffic maps</b><br><a href="https://www.traffic.delhipolice.gov.in/maps" target="_blank" rel="noopener">Delhi Traffic Police maps ↗</a></div>
+<div class="feed"><b>Live traffic layer</b><br><a href="https://www.google.com/maps/@28.6139,77.2090,11z/data=!5m1!1e1" target="_blank" rel="noopener">Google Maps traffic view ↗</a></div>
+<div class="feed"><b>Alternative navigation platform</b><br><a href="https://www.mappls.com/" target="_blank" rel="noopener">Mappls ↗</a></div>
+</div></section>
+<section class="card" style="margin-top:14px"><h2>Classroom incident observation register</h2><div class="muted">Students can record observations during a map-reading exercise. Entries stay in this browser session and are not sent to any authority.</div>
+<div class="formrow"><select id="zone"><option>Central Delhi</option><option>South / Airport</option><option>East / Northeast</option><option>West / Outer Delhi</option><option>North Delhi</option></select><select id="kind"><option>Congestion</option><option>Collision / accident (observed)</option><option>Road closure</option><option>Waterlogging</option><option>Vehicle breakdown</option><option>Other</option></select><button id="add">Add observation</button></div><div id="records" class="muted">No observations recorded in this session.</div>
+</section>
+<section class="card" style="margin-top:14px"><h2>Emergency contacts</h2><div class="grid twocol"><div><b>112</b> · Emergency response</div><div><b>1095</b> · Delhi Traffic Police helpline</div></div></section>
+</main>
+<footer>Data integrity note: embedded maps are location previews. Current congestion is accessed through external map-provider links. Official police alerts and advisories are separate sources. No CCTV analytics, vehicle speeds, traffic volumes or live accident counts are generated by this dashboard. Always verify current road conditions through official sources.</footer>
+<script>
+const zones={
+ city:{desc:"Overview of Delhi NCT and its major urban corridors.",maps:[["North / Central","North Delhi"],["South / Airport","South Delhi Airport"],["East / Northeast","East Delhi"],["West / Outer","West Delhi"]]},
+ central:{desc:"Central Delhi focus: Connaught Place, India Gate, ITO, Kashmere Gate and adjoining corridors.",maps:[["Central / North","Connaught Place Delhi"],["India Gate / ITO","India Gate ITO Delhi"],["East connection","Akshardham Delhi"],["West connection","Karol Bagh Delhi"]]},
+ south:{desc:"South and airport focus: Saket, Vasant Kunj, Mehrauli, Aerocity and IGI Airport approaches.",maps:[["South Delhi","Saket Delhi"],["Airport","Indira Gandhi International Airport Delhi"],["Vasant Kunj","Vasant Kunj Delhi"],["Mehrauli","Mehrauli Delhi"]]},
+ east:{desc:"East and Northeast focus: Shahdara, Seelampur, Geeta Colony, Anand Vihar and river crossings.",maps:[["Seelampur","Seelampur Delhi"],["Shahdara","Shahdara Delhi"],["Anand Vihar","Anand Vihar Delhi"],["Akshardham","Akshardham Delhi"]]}
+};
+const $=id=>document.getElementById(id);
+function updateZone(key){
+ const z=zones[key];$("zoneDescription").textContent=z.desc;
+ document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.zone===key));
+ z.maps.forEach((m,i)=>{
+  document.querySelectorAll(".maphead h3")[i].textContent=m[0];
+  $("map"+i).src="https://www.google.com/maps?q="+encodeURIComponent(m[1]+", Delhi")+"&output=embed";
+  $("link"+i).href="https://www.google.com/maps/@?api=1&map_action=map&query="+encodeURIComponent(m[1]+", Delhi")+"&layer=traffic";
+ });
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>updateZone(b.dataset.zone)));
+updateZone("city");
+function clock(){$("clock").textContent=new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"medium"}).format(new Date())+" IST"}clock();setInterval(clock,1000);
+$("add").addEventListener("click",()=>{
+ const entry=document.createElement("div");entry.className="incident";
+ const now=new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit"}).format(new Date());
+ entry.textContent=$("kind").value+" · "+$("zone").value+" · "+now+" IST";
+ if($("records").classList.contains("muted")){$("records").textContent="";$("records").classList.remove("muted")}
+ $("records").prepend(entry);
+});
+</script>
+</body></html>
